@@ -116,6 +116,7 @@ open class MarkdownView: UIView {
 </html>
 """
         wv.loadHTMLString(template, baseURL: htmlURL)
+        wv.removeUIDragDropInteraction()
     } else {
       // TODO: raise error
     }
@@ -183,4 +184,28 @@ extension UIColor {
     var greenValue: CGFloat{ return CIColor(color: self).green }
     var blueValue: CGFloat{ return CIColor(color: self).blue }
     var alphaValue: CGFloat{ return CIColor(color: self).alpha }
+}
+
+extension WKWebView {
+    func removeUIDragDropInteraction(){
+        func findInteractionView(in subviews: [UIView]) -> UIView? {
+            for subview in subviews {
+                for interaction in subview.interactions {
+                    if interaction is UIDragInteraction {
+                        return subview
+                    }
+                }
+                return findInteractionView(in: subview.subviews)
+            }
+            return nil
+        }
+        
+        if let interactionView = findInteractionView(in: subviews) {
+            for interaction in interactionView.interactions {
+                if interaction is UIDragInteraction || interaction is UIDropInteraction {
+                    interactionView.removeInteraction(interaction)
+                }
+            }
+        }
+    }
 }
