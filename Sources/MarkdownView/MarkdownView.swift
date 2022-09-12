@@ -56,6 +56,10 @@ open class MarkdownView: UIView {
         self.webView?.scrollView.backgroundColor = color
         self.webView?.evaluateJavaScript("document.body.style.background = 'rgb(\(color.redValue * 255),\(color.greenValue * 255),\(color.blueValue * 255)';"){_,_ in}
     }
+    
+    public func removeDragDropInteraction(){
+        self.webView?.removeUIDragDropInteraction()
+    }
 
     @objc public func load(markdown: String?, enableImage: Bool = true, backgroundColor: UIColor? = nil) {
     guard let markdown = markdown else { return }
@@ -116,7 +120,6 @@ open class MarkdownView: UIView {
 </html>
 """
         wv.loadHTMLString(template, baseURL: htmlURL)
-        wv.removeUIDragDropInteraction()
     } else {
       // TODO: raise error
     }
