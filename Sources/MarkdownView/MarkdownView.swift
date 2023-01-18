@@ -61,7 +61,7 @@ open class MarkdownView: UIView {
         self.webView?.removeUIDragDropInteraction()
     }
 
-    @objc public func load(markdown: String?, enableImage: Bool = true, backgroundColor: UIColor? = nil) {
+    @objc public func load(markdown: String?, enableImage: Bool = true, backgroundColor: UIColor) {
     guard let markdown = markdown else { return }
 
     if htmlURL != nil {
@@ -86,19 +86,9 @@ open class MarkdownView: UIView {
       wv.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
       wv.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
       wv.isOpaque = false
-        if backgroundColor != nil {
-            wv.backgroundColor = backgroundColor
-            wv.scrollView.backgroundColor = backgroundColor
-        }else{
-            if traitCollection.userInterfaceStyle == .dark{
-                wv.backgroundColor = darkBackground
-                wv.scrollView.backgroundColor = darkBackground
-            }else{
-                wv.backgroundColor = lightBackground
-                wv.scrollView.backgroundColor = lightBackground
-            }
-        }
-        wv.allowsLinkPreview = false
+      wv.backgroundColor = backgroundColor
+      wv.scrollView.backgroundColor = backgroundColor
+      wv.allowsLinkPreview = false
 
       self.webView = wv
         
@@ -111,7 +101,7 @@ open class MarkdownView: UIView {
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="stylesheet" href="./main.css" />
-        \(backgroundColor == nil ? "" : "<style>body{background-color: rgb(\(backgroundColor!.redValue * 255),\(backgroundColor!.greenValue * 255),\(backgroundColor!.blueValue * 255));}</style>")
+        \("<style>body{background-color: transparent;}</style>")
         <script src="./main.js"></script>
     </head>
     <body>
