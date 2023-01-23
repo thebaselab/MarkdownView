@@ -54,7 +54,6 @@ open class MarkdownView: UIView {
     @objc public func changeBackgroundColor(color: UIColor){
         self.webView?.backgroundColor = color
         self.webView?.scrollView.backgroundColor = color
-        self.webView?.evaluateJavaScript("document.body.style.background = 'rgb(\(color.redValue * 255),\(color.greenValue * 255),\(color.blueValue * 255)';"){_,_ in}
     }
     
     public func removeDragDropInteraction(){
