@@ -66,7 +66,7 @@ open class MarkdownView: UIView {
     if htmlURL != nil {
       let escapedMarkdown = self.escape(markdown: markdown) ?? ""
       let imageOption = enableImage ? "true" : "false"
-      let script = "window.showMarkdown('\(escapedMarkdown)', \(imageOption));"
+      let script = "window.showMarkdown('\(escapedMarkdown)', \(imageOption));alert('markdown.loaded');"
       let userScript = WKUserScript(source: script, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
 
       let controller = WKUserContentController()
@@ -79,6 +79,7 @@ open class MarkdownView: UIView {
       wv.scrollView.isScrollEnabled = self.isScrollEnabled
       wv.translatesAutoresizingMaskIntoConstraints = false
       wv.navigationDelegate = self
+      wv.uiDelegate = self
       addSubview(wv)
       wv.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
       wv.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
@@ -130,7 +131,13 @@ open class MarkdownView: UIView {
 
 }
 
-extension MarkdownView: WKNavigationDelegate {
+extension MarkdownView: WKNavigationDelegate, WKUIDelegate {
+    
+  public func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo) async {
+    if(message == "markdown.loaded"){
+      webView.removeUIDragDropInteraction()
+    }
+  }
 
   public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
     
